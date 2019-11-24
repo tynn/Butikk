@@ -1,0 +1,120 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.2'
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.60' apply false
+    id 'org.jetbrains.dokka' version '0.10.0'
+}
+
+repositories {
+    jcenter()
+}
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/docs"
+}
+
+subprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    plugins.withId('kotlin') {
+        project.apply plugin: 'jacoco'
+    }
+
+    plugins.withId('publish-token') {
+        project.apply plugin: 'org.jetbrains.dokka'
+    }
+
+    plugins.withType(com.android.build.gradle.BasePlugin) {
+        project.apply plugin: 'kotlin-android'
+
+        android {
+            compileSdkVersion 29
+
+            defaultConfig {
+                minSdkVersion 14
+                targetSdkVersion 29
+                testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+            }
+
+            compileOptions {
+                sourceCompatibility '1.8'
+                targetCompatibility '1.8'
+            }
+
+            kotlinOptions {
+                jvmTarget = '1.8'
+            }
+
+            sourceSets.all {
+                it.java.srcDirs += it.java.srcDirs.findResults {
+                    it.name == 'java' ? "$it.parent/kotlin" : null
+                }
+            }
+        }
+
+        afterEvaluate {
+            if (android.dataBinding.enabled) {
+                dependencies {
+                    annotationProcessor 'javax.xml.bind:jaxb-api:2.3.1'
+                    annotationProcessor 'com.sun.xml.bind:jaxb-impl:2.3.2'
+                    annotationProcessor 'com.sun.xml.bind:jaxb-core:2.3.0.1'
+                }
+            }
+        }
+    }
+
+    plugins.withId('org.jetbrains.dokka') {
+        rootProject.dokka.subProjects += project.name
+
+        dokka {
+            outputFormat = 'html'
+            outputDirectory = "$buildDir/kdoc"
+        }
+
+        tasks.register('dokkaJar', Jar) {
+            dependsOn dokka
+            classifier 'kdoc'
+            from fileTree(dokka.outputDirectory)
+        }
+    }
+
+    plugins.withType(JacocoPlugin) {
+        jacoco.toolVersion = '0.8.5'
+
+        tasks.withType(JacocoReport) {
+            check.dependsOn it
+            reports {
+                csv.enabled false
+                html.enabled true
+                xml.enabled true
+            }
+        }
+    }
+
+    tasks.withType(Test) {
+        testLogging {
+            events "failed"
+            exceptionFormat "full"
+            showExceptions true
+            showStackTraces true
+            showCauses true
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

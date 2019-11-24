@@ -1,0 +1,13 @@
+<!--  Copyright 2019 Christian Schmitz -->
+<!--  SPDX-License-Identifier: Apache-2.0 -->
+
+<resources>
+
+    <string name="app_name">Butikk Example</string>
+
+    <string name="action_primary">Increment</string>
+    <string name="action_secondary">Reset</string>
+
+    <string name="title_counts">Counting</string>
+
+</resources>

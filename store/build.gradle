@@ -1,0 +1,10 @@
+apply plugin: 'kotlin'
+apply plugin: 'publish-token'
+
+dependencies {
+    api Deps.kotlin.stdlib
+
+    implementation Deps.kotlinx.coroutines.core
+
+    testImplementation project(':testing')
+}

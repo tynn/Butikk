@@ -1,0 +1,23 @@
+apply plugin: 'com.android.library'
+apply plugin: 'publish-token'
+
+android {
+    defaultConfig {
+        versionCode 1
+    }
+
+    libraryVariants.all {
+        generateBuildConfigProvider.configure {
+            enabled = false
+        }
+    }
+}
+
+dependencies {
+    api project(':store')
+    api Deps.kotlin.stdlib
+    api Deps.androidx.lifecycle.livedata
+
+    testImplementation project(':testing')
+    testImplementation Deps.androidx.archtesting
+}

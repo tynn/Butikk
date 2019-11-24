@@ -1,0 +1,29 @@
+apply plugin: 'com.android.application'
+
+android {
+    defaultConfig {
+        minSdkVersion 24
+        versionCode 1
+        versionName "0.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation project(':livedata')
+
+    implementation Deps.androidx.core
+    implementation Deps.androidx.appcompat
+    implementation Deps.androidx.lifecycle.viewmodel
+}
