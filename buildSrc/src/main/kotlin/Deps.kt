@@ -6,8 +6,8 @@ object Deps {
     val kotlinx = Kotlinx
 
     object Androidx {
-        const val appcompat = "androidx.appcompat:appcompat:1.1.0"
         const val archtesting = "androidx.arch.core:core-testing:2.1.0"
+        const val appcompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.1.0"
         val lifecycle = Lifecycle
 

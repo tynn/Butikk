@@ -8,8 +8,8 @@ import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.rules.RuleChain.outerRule
-import xyz.tynn.butikk.testing.MainDispatcherRule
 import xyz.tynn.butikk.testing.GenericStoreUnitTest
+import xyz.tynn.butikk.testing.MainDispatcherRule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

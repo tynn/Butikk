@@ -10,6 +10,7 @@ plugins {
 }
 
 repositories {
+    google()
     jcenter()
 }
 
@@ -19,9 +20,9 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        publishToken {
-            id = 'publish-token'
-            implementationClass = 'publish.Token'
+        fixIdea {
+            id = 'xyz.tynn.idea.fix'
+            implementationClass = 'xyz.tynn.fixidea.FixIdeaPlugin'
         }
     }
 }

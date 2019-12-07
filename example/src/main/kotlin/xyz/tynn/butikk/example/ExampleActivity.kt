@@ -9,14 +9,13 @@ import androidx.databinding.DataBindingUtil.setContentView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.getInstance
 import androidx.lifecycle.get
-import xyz.tynn.butikk.example.R.layout.activity_example
 import xyz.tynn.butikk.example.databinding.ActivityExampleBinding as Binding
 
 class ExampleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = setContentView<Binding>(this, activity_example)
+        val binding = setContentView<Binding>(this, R.layout.activity_example)
         binding.viewModel = ViewModelProvider(this, getInstance(application)).get()
         binding.lifecycleOwner = this
     }

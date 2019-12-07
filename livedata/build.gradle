@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'publish-token'
 
 android {
     defaultConfig {
@@ -18,6 +17,6 @@ dependencies {
     api Deps.kotlin.stdlib
     api Deps.androidx.lifecycle.livedata
 
-    testImplementation project(':testing')
+    testImplementation testFixtures(project(':store'))
     testImplementation Deps.androidx.archtesting
 }

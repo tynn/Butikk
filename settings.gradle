@@ -1,4 +1,3 @@
 include ':example'
 include ':livedata'
 include ':store'
-include ':testing'

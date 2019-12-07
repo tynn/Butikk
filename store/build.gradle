@@ -1,10 +1,13 @@
-apply plugin: 'kotlin'
-apply plugin: 'publish-token'
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id 'java-test-fixtures'
+    id 'idea'
+}
 
 dependencies {
     api Deps.kotlin.stdlib
+    api Deps.kotlinx.coroutines.core
 
-    implementation Deps.kotlinx.coroutines.core
-
-    testImplementation project(':testing')
+    testFixturesApi Deps.kotlin.test.junit
+    testFixturesApi Deps.kotlinx.coroutines.test
 }

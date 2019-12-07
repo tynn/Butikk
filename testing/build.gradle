@@ -1,9 +1,0 @@
-apply plugin: 'kotlin'
-
-dependencies {
-    api project(':store')
-
-    api Deps.kotlin.stdlib
-    api Deps.kotlin.test.junit
-    api Deps.kotlinx.coroutines.test
-}
