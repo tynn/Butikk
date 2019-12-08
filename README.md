@@ -1,5 +1,6 @@
 # Butikk
 [![Build][travis-shield]][travis]
+[![Download][bintray-shield]][bintray]
 [![Coverage][codecov-shield]][codecov]
 
 Coroutine based `Store` implementation
@@ -26,3 +27,5 @@ Coroutine based `Store` implementation
   [travis]: https://travis-ci.com/tynn-xyz/Butikk
   [codecov-shield]: https://codecov.io/gh/tynn-xyz/Butikk/badge.svg
   [codecov]: https://codecov.io/gh/tynn-xyz/Butikk
+  [bintray-shield]: https://api.bintray.com/packages/tynn-xyz/maven/Butikk/images/download.svg
+  [bintray]: https://bintray.com/tynn-xyz/maven/Butikk/_latestVersion

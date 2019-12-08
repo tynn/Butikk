@@ -10,11 +10,13 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import xyz.tynn.butikk.Store
 import xyz.tynn.butikk.Updater
 import xyz.tynn.butikk.createStore
+import xyz.tynn.butikk.flow.asFlow
 import xyz.tynn.butikk.livedata.asLiveData
 import xyz.tynn.butikk.observe
 
@@ -27,24 +29,28 @@ class ExampleViewModel(
     }
 
     private val store by lazy {
-        @Suppress("EXPERIMENTAL_API_USAGE")
-        viewModelScope.createStore(newSingleThreadContext("store")) {
-            with(prefs) {
-                ExampleModel(
-                    getLong(KEY_CURRENT, 0),
-                    getLong(KEY_TOTAL, 0),
-                    getLong(KEY_RESET, 0)
-                )
-            }
-        }.apply {
-            viewModelScope.launch {
-                observe({ this }) {
-                    with(it) {
-                        Log.d("ExampleViewModel", toString())
+        with(viewModelScope) {
+            @Suppress("EXPERIMENTAL_API_USAGE")
+            createStore(newSingleThreadContext("store")) {
+                with(prefs) {
+                    ExampleModel(
+                        getLong(KEY_CURRENT, 0),
+                        getLong(KEY_TOTAL, 0),
+                        getLong(KEY_RESET, 0)
+                    )
+                }
+            }.apply {
+                launch {
+                    asFlow().collect {
+                        Log.d("ExampleViewModel", it.toString())
+                    }
+                }
+                launch {
+                    observe({ this }) {
                         prefs.edit {
-                            putLong(KEY_CURRENT, currentCount)
-                            putLong(KEY_TOTAL, totalCount)
-                            putLong(KEY_RESET, resetCount)
+                            putLong(KEY_CURRENT, it.currentCount)
+                            putLong(KEY_TOTAL, it.totalCount)
+                            putLong(KEY_RESET, it.resetCount)
                         }
                     }
                 }
@@ -52,7 +58,7 @@ class ExampleViewModel(
         }
     }
 
-    val currentCount by lazy {
+    val counts by lazy {
         store.asLiveData {
             "$currentCount/$resetCount/$totalCount"
         }
@@ -63,6 +69,10 @@ class ExampleViewModel(
             currentCount = currentCount + 1,
             totalCount = totalCount + 1
         )
+    }
+
+    fun repeatCount() = update(store) {
+        this
     }
 
     fun resetCount() = update(store) {

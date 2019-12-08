@@ -19,20 +19,12 @@
         tools:context=".ExampleActivity">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/title_counts"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@{viewModel.currentCount}"
+            android:text="@{viewModel.counts}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"
             tools:text="7/1/9" />
 
@@ -41,13 +33,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.incrementCount()}"
-            android:text="@string/action_primary" />
+            android:text="@string/action_increment" />
 
-        <Button
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> viewModel.resetCount()}"
-            android:text="@string/action_secondary" />
+            android:orientation="horizontal">
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{() -> viewModel.repeatCount()}"
+                android:text="@string/action_repeat" />
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{() -> viewModel.resetCount()}"
+                android:text="@string/action_reset" />
+        </LinearLayout>
     </LinearLayout>
 </layout>

@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -11,18 +11,28 @@ plugins {
 
 repositories {
     google()
+    mavenCentral()
     jcenter()
-}
-
-dependencies {
-    compileOnly gradleApi()
 }
 
 gradlePlugin {
     plugins {
         fixIdea {
             id = 'xyz.tynn.idea.fix'
-            implementationClass = 'xyz.tynn.fixidea.FixIdeaPlugin'
+            implementationClass = 'xyz.tynn.buildsrc.fixidea.FixIdeaPlugin'
+        }
+        androidPublish {
+            id = 'xyz.tynn.android.adhoc'
+            implementationClass = 'xyz.tynn.buildsrc.component.AndroidAdhocPlugin'
+        }
+        kdocElements {
+            id = 'xyz.tynn.kdoc.elements'
+            implementationClass = 'xyz.tynn.buildsrc.component.KdocElementsPlugin'
         }
     }
+}
+
+dependencies {
+    api 'com.android.tools.build:gradle:3.5.3'
+    compileOnly gradleApi()
 }

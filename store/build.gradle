@@ -4,6 +4,11 @@ plugins {
     id 'idea'
 }
 
+components.java {
+    addVariantsFromConfiguration(configurations.testFixturesApiElements) { skip() }
+    addVariantsFromConfiguration(configurations.testFixturesRuntimeElements) { skip() }
+}
+
 dependencies {
     api Deps.kotlin.stdlib
     api Deps.kotlinx.coroutines.core
