@@ -23,7 +23,7 @@ allprojects {
     }
 
     plugins.withId('org.jetbrains.dokka') {
-        tasks.named('dokka') {
+        dokka {
             configuration {
                 externalDocumentationLink {
                     url = new URL('https://developer.android.com/reference/kotlin/')
@@ -131,11 +131,9 @@ subprojects {
 
     plugins.withId('org.jetbrains.dokka') {
         project.apply plugin: 'xyz.tynn.kdoc.elements'
-        rootProject.tasks.named('dokka') {
-            subProjects += project.name
-        }
+        rootProject.dokka.subProjects += project.name
 
-        tasks.named('dokka') {
+        dokka {
             outputFormat = 'html'
             outputDirectory = "$buildDir/kdoc"
 

@@ -35,23 +35,22 @@ cache:
     - $HOME/.android/build-cache
 
 
-script: ./gradlew build check :dokka
+script: ./gradlew build check && ./gradlew :dokka
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - mv -- build/docs/-butikk build/docs/docs
 
 deploy:
   - provider: pages
     skip_cleanup: true
     github_token: $GITHUB_TOKEN
-    local_dir: build/docs/
+    local_dir: build/docs/-butikk/
     on:
       tags: true
       condition: $TRAVIS_TAG =~ ^[0-9].[0-9].[0-9]$
   - provider: script
     skip_cleanup: true
-    script: ./gradlew publish -Pversion=$TRAVIS_TAG
+    script: ./gradlew publish -Pversion=$TRAVIS_TAG >/dev/null
     on:
       tags: true
       condition: $TRAVIS_TAG =~ ^[0-9].[0-9].[0-9]$
