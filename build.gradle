@@ -139,7 +139,7 @@ subprojects {
 
             configuration {
                 externalDocumentationLink {
-                    url = new URL('https://tynn-xyz.github.io/Butikk/docs/')
+                    url = new URL('https://tynn-xyz.github.io/Butikk/')
                     packageListUrl = new URL(url, 'package-list')
                 }
             }
