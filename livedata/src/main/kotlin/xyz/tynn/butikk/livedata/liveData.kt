@@ -10,12 +10,6 @@ import xyz.tynn.butikk.Store
 import xyz.tynn.butikk.observe
 
 /**
- * Subscribes to the store and creates a [LiveData] of `State`.
- */
-fun <State> Store<State>.asLiveData() =
-    liveData { subscribe { emit(it) } }
-
-/**
  * Observes changes to the store and creates a [LiveData] of `Value`.
  */
 inline fun <State, Value> Store<State>.asLiveData(

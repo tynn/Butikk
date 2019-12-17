@@ -7,13 +7,13 @@ object Deps {
 
     object Androidx {
         const val archtesting = "androidx.arch.core:core-testing:2.1.0"
-        const val appcompat = "androidx.appcompat:appcompat:1.1.0"
-        const val core = "androidx.core:core-ktx:1.1.0"
+        const val appcompat = "androidx.appcompat:appcompat:1.2.0-alpha01"
+        const val core = "androidx.core:core-ktx:1.2.0-rc01"
         val lifecycle = Lifecycle
 
         object Lifecycle {
             private const val group = "androidx.lifecycle"
-            private const val version = "2.2.0-rc02"
+            private const val version = "2.2.0-rc03"
 
             const val livedata = "$group:lifecycle-livedata-ktx:$version"
             const val viewmodel = "$group:lifecycle-viewmodel-ktx:$version"

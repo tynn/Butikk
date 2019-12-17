@@ -6,6 +6,7 @@ package xyz.tynn.butikk.livedata
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.rules.RuleChain.outerRule
 import xyz.tynn.butikk.testing.GenericStoreUnitTest
@@ -21,24 +22,7 @@ internal class LiveDataKtTest : GenericStoreUnitTest<String>("init") {
         .around(MainDispatcherRule(Unconfined))
 
     @Test
-    fun `asLiveData should observe values from state`() = runBlocking {
-        val liveData = store.asLiveData()
-
-        val updates = listOf("update", "update", "end")
-        val actual = collect<String> { observe ->
-            liveData.observeForever {
-                runBlocking { observe(it) }
-            }
-        }
-
-        for (update in updates)
-            store.enqueue { update }
-
-        assertEquals(listOf(initialState) + updates, actual)
-    }
-
-    @Test
-    fun `asLiveData should observe changed values from state`() = runBlocking {
+    fun `asLiveData should observe changed values from state`() = runBlockingTest {
         val liveData = store.asLiveData(String::length)
 
         val updates = listOf("update", "update", "end")

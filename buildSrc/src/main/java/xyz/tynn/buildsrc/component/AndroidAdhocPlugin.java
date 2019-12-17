@@ -52,7 +52,7 @@ public final class AndroidAdhocPlugin implements Plugin<Project> {
         ConfigurationContainer configurations = project.getConfigurations();
         Configuration api = createConfiguration(configurations, component, true);
         Configuration runtime = createConfiguration(configurations, component, false);
-        extension.getLibraryVariants().all(variant -> addArtifacts(variant, project.getTasks(), runtime, api));
+        extension.getLibraryVariants().all(variant -> addArtifacts(project, variant, runtime, api));
     }
 
     private AdhocComponentWithVariants createComponent(Project project) {
@@ -77,13 +77,15 @@ public final class AndroidAdhocPlugin implements Plugin<Project> {
         attributes.attribute(USAGE_ATTRIBUTE, objectFactory.named(Usage.class, usage));
     }
 
-    private static void addArtifacts(LibraryVariant variant, TaskContainer tasks, Configuration runtime, Configuration api) {
+    private static void addArtifacts(Project project, LibraryVariant variant, Configuration runtime, Configuration api) {
         if (!variant.getFlavorName().equals(""))
             throw new IllegalStateException("Android flavors are not yet supported.");
         if (!variant.getBuildType().getName().equals("release")) return;
+        runtime.extendsFrom(project.getConfigurations().getByName("releaseRuntimeElements"));
         runtime.getArtifacts().addLater(variant.getPackageLibraryProvider().map(ArchivePublishArtifact::new));
+        api.extendsFrom(project.getConfigurations().getByName("releaseApiElements"));
         api.getArtifacts().addLater(variant.getPackageLibraryProvider().map(ArchivePublishArtifact::new));
-        api.getArtifacts().addLater(registerSourcesJar(variant, tasks).map(ArchivePublishArtifact::new));
+        api.getArtifacts().addLater(registerSourcesJar(variant, project.getTasks()).map(ArchivePublishArtifact::new));
     }
 
     private static TaskProvider<VariantSourcesJar> registerSourcesJar(LibraryVariant variant, TaskContainer tasks) {
