@@ -42,6 +42,8 @@ interface Store<State> {
      * Consumes all [value] changes with [observe].
      *
      * The function resumes when the store is closed or the [Observer] canceled.
+     *
+     * @param observe The [Observer] receiving the values.
      */
     suspend fun consume(observe: Observer<State>)
 
@@ -49,6 +51,8 @@ interface Store<State> {
      * Enqueues an [update] to be applied to the [value].
      *
      * The function might resume before the update was applied.
+     *
+     * @param update The [Updater] mutate the provided [value].
      */
     suspend fun enqueue(update: Updater<State>)
 }

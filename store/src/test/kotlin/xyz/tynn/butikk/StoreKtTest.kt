@@ -10,7 +10,7 @@ import kotlin.coroutines.coroutineContext
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class StoreKtTest {
+internal class StoreKtTest {
 
     val name = CoroutineName("name")
 

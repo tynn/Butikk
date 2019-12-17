@@ -4,7 +4,6 @@
 package xyz.tynn.butikk
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.test.runBlockingTest
 import xyz.tynn.butikk.testing.GenericStoreUnitTest
 import kotlin.coroutines.coroutineContext
@@ -76,10 +75,21 @@ internal class StoreImplTest : GenericStoreUnitTest<String>("init") {
     }
 
     @Test
-    fun `cancel of context should cancel observer`() = runBlockingTest {
-        val launch = launch(Unconfined) { store.consume {} }
+    fun `cancel should cancel consume`() = runBlockingTest {
+        val launch = launch { store.consume { cancel() } }
+
+        launch.join()
+
+        assertFalse { launch.isActive }
+        assertTrue { launch.isCancelled }
+    }
+
+    @Test
+    fun `cancel of context should cancel consume`() = runBlockingTest {
+        val launch = launch { store.consume {} }
 
         scope.cancel(CancellationException())
+        launch.join()
 
         assertFalse { launch.isActive }
         assertTrue { launch.isCancelled }

@@ -41,7 +41,7 @@ internal class FlowKtTest : GenericStoreUnitTest<String>("init") {
 
     @Test
     fun `cancel of context should cancel the flow`() = runBlockingTest {
-        val launch = launch(Unconfined) { store.asFlow().collect { } }
+        val launch = launch { store.asFlow().collect { } }
         val cause = CancellationException()
 
         scope.cancel(cause)

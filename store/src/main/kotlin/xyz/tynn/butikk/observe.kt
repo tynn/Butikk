@@ -4,7 +4,9 @@
 package xyz.tynn.butikk
 
 /**
- * Observe changes to [Value] in [State] of store.
+ * Observe changes to [Value] in [State] of [Store.value].
+ *
+ * The function resumes when the store is closed or the [Observer] canceled.
  *
  * @param select The [Selector] of the [Value] in [State].
  * @param observe The [Observer] receiving the values.

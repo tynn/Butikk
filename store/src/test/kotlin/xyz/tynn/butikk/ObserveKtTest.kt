@@ -4,7 +4,6 @@
 package xyz.tynn.butikk
 
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
@@ -28,10 +27,21 @@ internal class ObserveKtTest : GenericStoreUnitTest<String>("init") {
     }
 
     @Test
-    fun `cancel of context should cancel the observe`() = runBlockingTest {
-        val launch = launch(Unconfined) { store.observe(String::first) {} }
+    fun `cancel should cancel observe`() = runBlockingTest {
+        val launch = launch { store.observe(String::first) { cancel() } }
+
+        launch.join()
+
+        assertFalse { launch.isActive }
+        assertTrue { launch.isCancelled }
+    }
+
+    @Test
+    fun `cancel of context should cancel observe`() = runBlockingTest {
+        val launch = launch { store.observe(String::first) {} }
 
         scope.cancel(CancellationException())
+        launch.join()
 
         assertFalse { launch.isActive }
         assertTrue { launch.isCancelled }
