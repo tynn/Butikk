@@ -3,15 +3,16 @@
 
 package xyz.tynn.butikk
 
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import xyz.tynn.butikk.testing.GenericStoreUnitTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Suppress("EXPERIMENTAL_API_USAGE")
 internal class ActionKtTest : GenericStoreUnitTest<String>("init") {
 
     @Test
-    fun `dispatch should provide current state`() = runBlocking {
+    fun `dispatch should provide current state`() = runBlockingTest {
         val value = "value"
         store.enqueue { value }
 
@@ -21,7 +22,7 @@ internal class ActionKtTest : GenericStoreUnitTest<String>("init") {
     }
 
     @Test
-    fun `dispatch should interact with store`() = runBlocking {
+    fun `dispatch should interact with store`() = runBlockingTest {
         val values = collect<String> { store.subscribe(it) }
         val updates = listOf("update", "update", "end")
 

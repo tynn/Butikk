@@ -8,17 +8,18 @@ import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import xyz.tynn.butikk.testing.GenericStoreUnitTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
+@Suppress("EXPERIMENTAL_API_USAGE")
 internal class FlowKtTest : GenericStoreUnitTest<String>("init") {
 
     @Test
-    fun `asFlow should observe all updates`() = runBlocking {
+    fun `asFlow should observe all updates`() = runBlockingTest {
         val values = collect<String> { store.asFlow().collect(it) }
         val updates = listOf("update", "update", "end")
 
@@ -29,7 +30,7 @@ internal class FlowKtTest : GenericStoreUnitTest<String>("init") {
     }
 
     @Test
-    fun `asFlow should start with latest state`() = runBlocking {
+    fun `asFlow should start with latest state`() = runBlockingTest {
         val last = "end"
 
         for (update in listOf("update", "update", last))
@@ -39,7 +40,7 @@ internal class FlowKtTest : GenericStoreUnitTest<String>("init") {
     }
 
     @Test
-    fun `cancel of context should cancel the flow`() = runBlocking {
+    fun `cancel of context should cancel the flow`() = runBlockingTest {
         val launch = launch(Unconfined) { store.asFlow().collect { } }
         val cause = CancellationException()
 

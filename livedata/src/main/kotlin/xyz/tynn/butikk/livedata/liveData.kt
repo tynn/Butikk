@@ -5,7 +5,7 @@ package xyz.tynn.butikk.livedata
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import xyz.tynn.butikk.Accessor
+import xyz.tynn.butikk.Selector
 import xyz.tynn.butikk.Store
 import xyz.tynn.butikk.observe
 
@@ -19,5 +19,5 @@ fun <State> Store<State>.asLiveData() =
  * Observes changes to the store and creates a [LiveData] of `Value`.
  */
 inline fun <State, Value> Store<State>.asLiveData(
-    crossinline access: Accessor<State, Value>
-) = liveData { observe(access) { emit(it) } }
+    crossinline select: Selector<State, Value>
+) = liveData { observe(select) { emit(it) } }

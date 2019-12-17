@@ -3,113 +3,34 @@
 
 package xyz.tynn.butikk
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Unconfined
-import xyz.tynn.butikk.testing.GenericStoreUnitTest
 import kotlin.coroutines.coroutineContext
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-internal class StoreKtTest : GenericStoreUnitTest<String>("init") {
+class StoreKtTest {
 
-    val error = "Store update failed"
-
-    @Test
-    fun `initialize should initialize the state`() {
-        assertEquals(initialState, store.value)
-    }
+    val name = CoroutineName("name")
 
     @Test
-    fun `initialize should contain scope`() {
-        val name = CoroutineName("name")
-        val scope = scope + name
-
-        store = scope.createStore {
+    fun `createStore should use coroutineContext of scope`() {
+        val store = CoroutineScope(Unconfined + name).createStore {
             assertEquals(name, coroutineContext[CoroutineName])
-            initialState
+            name
         }
 
-        assertEquals(initialState, store.value)
+        assertEquals(name, store.value)
     }
 
     @Test
-    fun `initialize should contain scope and context`() {
-        val name = CoroutineName("name")
-        val scope = scope + CoroutineName("")
-
-        store = scope.createStore(name) {
+    fun `createStore should use context`() {
+        val store = CoroutineScope(Unconfined).createStore(name) {
             assertEquals(name, coroutineContext[CoroutineName])
-            initialState
+            name
         }
 
-        assertEquals(initialState, store.value)
-    }
-
-    @Test
-    fun `initialize should contain context`() {
-        val name = CoroutineName("name")
-
-        store = scope.createStore(name) {
-            assertEquals(name, coroutineContext[CoroutineName])
-            initialState
-        }
-
-        assertEquals(initialState, store.value)
-    }
-
-    @Test
-    fun `initialize should cancel the store on error`() = runBlocking {
-        store = scope.createStore { throw IllegalArgumentException("Error") }
-
-        assertFailsWith<CancellationException>(error) { store.value }
-        assertFailsWith<CancellationException>(error) { store.subscribe { } }
-        assertFailsWith<CancellationException>(error) { store.enqueue { this } }
-        Unit
-    }
-
-    @Test
-    fun `value should throw before initialize`() {
-        assertFailsWith<IllegalStateException> {
-            scope.createStore { delay(1000) }.value
-        }
-    }
-
-    @Test
-    fun `cancel of context should cancel observer`() = runBlocking {
-        val launch = launch(Unconfined) { store.subscribe {} }
-
-        scope.cancel(CancellationException())
-
-        assertFalse { launch.isActive }
-        assertTrue { launch.isCancelled }
-    }
-
-    @Test
-    fun `enqueue should update the state`() = runBlocking {
-        val update = "update"
-
-        store.enqueue { update }
-
-        assertEquals(update, store.value)
-    }
-
-    @Test
-    fun `enqueue should cancel the store on error`() = runBlocking {
-        store.enqueue { throw IllegalArgumentException("Error") }
-
-        assertFailsWith<CancellationException>(error) { store.value }
-        assertFailsWith<CancellationException>(error) { store.subscribe { } }
-        assertFailsWith<CancellationException>(error) { store.enqueue { this } }
-        Unit
-    }
-
-    @Test
-    fun `subscribe should observe all updates`() = runBlocking {
-        val values = collect<String> { store.subscribe(it) }
-        val updates = listOf("update", "update", "end")
-
-        for (update in updates)
-            store.enqueue { update }
-
-        assertEquals(listOf(initialState) + updates, values)
+        assertEquals(name, store.value)
     }
 }

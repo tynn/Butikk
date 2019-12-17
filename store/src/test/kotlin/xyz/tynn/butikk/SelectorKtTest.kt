@@ -7,17 +7,18 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import xyz.tynn.butikk.testing.GenericStoreUnitTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class AccessorKtTest : GenericStoreUnitTest<String>("init") {
+@Suppress("EXPERIMENTAL_API_USAGE")
+internal class SelectorKtTest : GenericStoreUnitTest<String>("init") {
 
     @Test
-    fun `observe should observe changed values from state`() = runBlocking {
+    fun `observe should observe changed values from state`() = runBlockingTest {
         val values = collect<Char> { store.observe(String::first, it) }
 
         for (update in listOf("update", "update", "end"))
@@ -27,7 +28,7 @@ internal class AccessorKtTest : GenericStoreUnitTest<String>("init") {
     }
 
     @Test
-    fun `cancel of context should cancel the observe`() = runBlocking {
+    fun `cancel of context should cancel the observe`() = runBlockingTest {
         val launch = launch(Unconfined) { store.observe(String::first) {} }
 
         scope.cancel(CancellationException())
