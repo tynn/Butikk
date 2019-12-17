@@ -4,11 +4,6 @@
 package xyz.tynn.butikk
 
 /**
- * Lambda typealias to run an action on the `Store` with the current `State` as parameter.
- */
-typealias Action<State, Result> = suspend Store<State>.(State) -> Result
-
-/**
  * Dispatches an [action] to run with the current [Store.value] provided as parameter.
  *
  * @param action The [Action] to run.

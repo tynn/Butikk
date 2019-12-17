@@ -4,11 +4,6 @@
 package xyz.tynn.butikk
 
 /**
- * Lambda typealias to select `Value` in `State`.
- */
-typealias Selector<State, Value> = State.() -> Value
-
-/**
  * Observe changes to [Value] in [State] of store.
  *
  * @param select The [Selector] of the [Value] in [State].

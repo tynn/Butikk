@@ -13,46 +13,6 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 /**
- * Lambda typealias to initialize the [Store] with a `State`.
- */
-typealias Initializer<State> = suspend () -> State
-
-/**
- * Lambda typealias to observe the `Value` of the [Store].
- */
-typealias Observer<Value> = suspend (Value) -> Unit
-
-/**
- * Lambda typealias to update the [Store] with a `State`.
- */
-typealias Updater<State> = State.() -> State
-
-/**
- * A store providing methods to update the [value] and observe changes to it.
- */
-interface Store<State> {
-
-    /**
-     * Gives access the current value of the store.
-     */
-    val value: State
-
-    /**
-     * Consumes all [value] changes with [observe].
-     *
-     * The function resumes when the store is closed or the [Observer] canceled.
-     */
-    suspend fun consume(observe: Observer<State>)
-
-    /**
-     * Enqueues an [update] to be applied to the [value].
-     *
-     * The function might resume before the update was applied.
-     */
-    suspend fun enqueue(update: Updater<State>)
-}
-
-/**
  * Creates a new [Store] with an initial value provided by [initialize].
  *
  * The coroutine context is inherited from a [CoroutineScope].
