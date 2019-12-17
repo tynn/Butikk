@@ -15,7 +15,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @Suppress("EXPERIMENTAL_API_USAGE")
-internal class SelectorKtTest : GenericStoreUnitTest<String>("init") {
+internal class ObserveKtTest : GenericStoreUnitTest<String>("init") {
 
     @Test
     fun `observe should observe changed values from state`() = runBlockingTest {

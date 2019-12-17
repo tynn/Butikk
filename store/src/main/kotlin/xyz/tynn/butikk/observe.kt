@@ -19,7 +19,7 @@ suspend inline fun <State, Value> Store<State>.observe(
     crossinline observe: Observer<Value>
 ) {
     var latest: Any? = Any()
-    subscribe {
+    consume {
         val value = it.select()
         if (latest != value) {
             latest = value

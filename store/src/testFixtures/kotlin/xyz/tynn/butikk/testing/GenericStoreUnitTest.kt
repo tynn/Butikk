@@ -32,7 +32,7 @@ abstract class GenericStoreUnitTest<T>(
         scope.cancel()
     }
 
-    inline fun <T> CoroutineScope.collect(
+    inline fun <T> collect(
         crossinline collector: suspend (Observer<T>) -> Unit
     ): List<T> = mutableListOf<T>().apply {
         scope.launch {

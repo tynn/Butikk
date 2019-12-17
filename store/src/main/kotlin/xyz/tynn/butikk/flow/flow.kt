@@ -8,6 +8,6 @@ import kotlinx.coroutines.flow.flow
 import xyz.tynn.butikk.Store
 
 /**
- * Subscribes to the store and creates a [Flow] of `State`.
+ * Consumes the store and creates a [Flow] of `State`.
  */
-fun <State> Store<State>.asFlow() = flow { subscribe { emit(it) } }
+fun <State> Store<State>.asFlow() = flow { consume { emit(it) } }

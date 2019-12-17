@@ -63,7 +63,7 @@ internal class StoreImplTest : GenericStoreUnitTest<String>("init") {
         store = scope.createStore { throw IllegalArgumentException("Error") }
 
         assertFailsWith<CancellationException>(error) { store.value }
-        assertFailsWith<CancellationException>(error) { store.subscribe { } }
+        assertFailsWith<CancellationException>(error) { store.consume { } }
         assertFailsWith<CancellationException>(error) { store.enqueue { this } }
         Unit
     }
@@ -77,12 +77,23 @@ internal class StoreImplTest : GenericStoreUnitTest<String>("init") {
 
     @Test
     fun `cancel of context should cancel observer`() = runBlockingTest {
-        val launch = launch(Unconfined) { store.subscribe {} }
+        val launch = launch(Unconfined) { store.consume {} }
 
         scope.cancel(CancellationException())
 
         assertFalse { launch.isActive }
         assertTrue { launch.isCancelled }
+    }
+
+    @Test
+    fun `consume should observe all updates`() = runBlockingTest {
+        val values = collect<String> { store.consume(it) }
+        val updates = listOf("update", "update", "end")
+
+        for (update in updates)
+            store.enqueue { update }
+
+        assertEquals(listOf(initialState) + updates, values)
     }
 
     @Test
@@ -99,19 +110,8 @@ internal class StoreImplTest : GenericStoreUnitTest<String>("init") {
         store.enqueue { throw IllegalArgumentException("Error") }
 
         assertFailsWith<CancellationException>(error) { store.value }
-        assertFailsWith<CancellationException>(error) { store.subscribe { } }
+        assertFailsWith<CancellationException>(error) { store.consume { } }
         assertFailsWith<CancellationException>(error) { store.enqueue { this } }
         Unit
-    }
-
-    @Test
-    fun `subscribe should observe all updates`() = runBlockingTest {
-        val values = collect<String> { store.subscribe(it) }
-        val updates = listOf("update", "update", "end")
-
-        for (update in updates)
-            store.enqueue { update }
-
-        assertEquals(listOf(initialState) + updates, values)
     }
 }

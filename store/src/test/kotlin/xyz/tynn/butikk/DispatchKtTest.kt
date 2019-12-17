@@ -9,7 +9,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @Suppress("EXPERIMENTAL_API_USAGE")
-internal class ActionKtTest : GenericStoreUnitTest<String>("init") {
+internal class DispatchKtTest : GenericStoreUnitTest<String>("init") {
 
     @Test
     fun `dispatch should provide current state`() = runBlockingTest {
@@ -23,7 +23,7 @@ internal class ActionKtTest : GenericStoreUnitTest<String>("init") {
 
     @Test
     fun `dispatch should interact with store`() = runBlockingTest {
-        val values = collect<String> { store.subscribe(it) }
+        val values = collect<String> { store.consume(it) }
         val updates = listOf("update", "update", "end")
 
         store.dispatch {

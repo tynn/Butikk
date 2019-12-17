@@ -38,18 +38,18 @@ interface Store<State> {
     val value: State
 
     /**
+     * Consumes all [value] changes with [observe].
+     *
+     * The function resumes when the store is closed or the [Observer] canceled.
+     */
+    suspend fun consume(observe: Observer<State>)
+
+    /**
      * Enqueues an [update] to be applied to the [value].
      *
      * The function might resume before the update was applied.
      */
     suspend fun enqueue(update: Updater<State>)
-
-    /**
-     * Subscribes to [observe] all [value] changes.
-     *
-     * The function resumes when the store is closed or the [Observer] canceled.
-     */
-    suspend fun subscribe(observe: Observer<State>)
 }
 
 /**
@@ -89,11 +89,11 @@ private class StoreImpl<State>(
 
     override val value get() = store.value
 
+    override suspend fun consume(
+        observe: Observer<State>
+    ) = store.consumeEach { observe(it) }
+
     override suspend fun enqueue(
         update: Updater<State>
     ) = dispatcher.send(update)
-
-    override suspend fun subscribe(
-        observe: Observer<State>
-    ) = store.consumeEach { observe(it) }
 }
