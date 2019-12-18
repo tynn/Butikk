@@ -9,13 +9,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.rules.RuleChain.outerRule
-import xyz.tynn.butikk.testing.GenericStoreUnitTest
+import xyz.tynn.butikk.testing.StoreUnitTest
 import xyz.tynn.butikk.testing.MainDispatcherRule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @Suppress("EXPERIMENTAL_API_USAGE")
-internal class LiveDataKtTest : GenericStoreUnitTest<String>("init") {
+internal class LiveDataKtTest : StoreUnitTest<String>("init") {
 
     @get:Rule
     val rule = outerRule(InstantTaskExecutorRule())

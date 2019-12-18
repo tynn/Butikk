@@ -4,12 +4,12 @@
 package xyz.tynn.butikk
 
 import kotlinx.coroutines.test.runBlockingTest
-import xyz.tynn.butikk.testing.GenericStoreUnitTest
+import xyz.tynn.butikk.testing.StoreUnitTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @Suppress("EXPERIMENTAL_API_USAGE")
-internal class DispatchKtTest : GenericStoreUnitTest<String>("init") {
+internal class DispatchKtTest : StoreUnitTest<String>("init") {
 
     @Test
     fun `dispatch should provide current state`() = runBlockingTest {

@@ -1,6 +1,8 @@
 //  Copyright 2019 Christian Schmitz
 //  SPDX-License-Identifier: Apache-2.0
 
+@file:JvmName("LiveDataKt")
+
 package xyz.tynn.butikk.livedata
 
 import androidx.lifecycle.LiveData

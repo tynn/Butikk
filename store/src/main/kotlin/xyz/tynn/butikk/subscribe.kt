@@ -6,12 +6,12 @@ package xyz.tynn.butikk
 import kotlinx.coroutines.CancellationException
 
 /**
- * Unsubscribe from within [Store.subscribe].
+ * Unsubscribe from within [subscribe].
  */
 fun unsubscribe(): Nothing = throw Unsubscribe
 
 /**
- * Subscribe to consume all [value] changes with [observe].
+ * Subscribe to consume all [Store.value] changes with [observe].
  *
  * The function resumes when the store is closed, the [Observer] canceled
  * or [unsubscribe] was called from within [observe].
@@ -26,6 +26,6 @@ suspend fun <State> Store<State>.subscribe(
 }
 
 /**
- * Token exception thrown by [unsubscribe] and caught by [Store.subscribe].
+ * Token exception thrown by [unsubscribe] and caught by [subscribe].
  */
 private object Unsubscribe : CancellationException("called outside of subscribe")

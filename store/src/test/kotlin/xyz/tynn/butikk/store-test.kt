@@ -4,15 +4,37 @@
 package xyz.tynn.butikk
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.test.runBlockingTest
-import xyz.tynn.butikk.testing.GenericStoreUnitTest
+import xyz.tynn.butikk.testing.StoreUnitTest
 import kotlin.coroutines.coroutineContext
 import kotlin.test.*
 
 @Suppress("EXPERIMENTAL_API_USAGE")
-internal class StoreImplTest : GenericStoreUnitTest<String>("init") {
+internal class StoreKtTest : StoreUnitTest<String>("init") {
 
+    val name = CoroutineName("name")
     val error = "Store update failed"
+
+    @Test
+    fun `createStore should use coroutineContext of scope`() {
+        val store = CoroutineScope(Unconfined + name).createStore {
+            assertEquals(name, coroutineContext[CoroutineName])
+            name
+        }
+
+        assertEquals(name, store.value)
+    }
+
+    @Test
+    fun `createStore should use context`() {
+        val store = CoroutineScope(Unconfined).createStore(name) {
+            assertEquals(name, coroutineContext[CoroutineName])
+            name
+        }
+
+        assertEquals(name, store.value)
+    }
 
     @Test
     fun `initialize should initialize the state`() {

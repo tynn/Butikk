@@ -4,19 +4,18 @@
 package xyz.tynn.butikk.flow
 
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import xyz.tynn.butikk.testing.GenericStoreUnitTest
+import xyz.tynn.butikk.testing.StoreUnitTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @Suppress("EXPERIMENTAL_API_USAGE")
-internal class FlowKtTest : GenericStoreUnitTest<String>("init") {
+internal class FlowKtTest : StoreUnitTest<String>("init") {
 
     @Test
     fun `asFlow should observe all updates`() = runBlockingTest {

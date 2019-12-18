@@ -42,7 +42,7 @@ final class FixIdeaPlugin implements Plugin<Project> {
                     module {
                         sourceDirs -= sourceSets.testFixtures.allSource
                         testSourceDirs += sourceSets.testFixtures.allSource.srcDirs
-                        scopes.COMPILE.plus.add(configurations.ideaTestFixturesClasspath)
+                        scopes.PROVIDED.plus += [configurations.ideaTestFixturesClasspath]
                     }
                 }
             }

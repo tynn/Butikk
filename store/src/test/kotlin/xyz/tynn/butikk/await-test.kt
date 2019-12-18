@@ -8,14 +8,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import xyz.tynn.butikk.testing.GenericStoreUnitTest
+import xyz.tynn.butikk.testing.StoreUnitTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @Suppress("EXPERIMENTAL_API_USAGE")
-internal class AwaitKtTest : GenericStoreUnitTest<String>("init") {
+internal class AwaitKtTest : StoreUnitTest<String>("init") {
 
     @Test
     fun `await should return current value`() = runBlockingTest {

@@ -14,7 +14,7 @@ import xyz.tynn.butikk.createStore
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
-abstract class GenericStoreUnitTest<T>(
+abstract class StoreUnitTest<T>(
     val initialState: T
 ) {
 
