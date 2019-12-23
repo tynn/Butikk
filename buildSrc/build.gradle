@@ -17,10 +17,6 @@ repositories {
 
 gradlePlugin {
     plugins {
-        fixIdea {
-            id = 'xyz.tynn.idea.fix'
-            implementationClass = 'xyz.tynn.buildsrc.fixidea.FixIdeaPlugin'
-        }
         androidPublish {
             id = 'xyz.tynn.android.adhoc'
             implementationClass = 'xyz.tynn.buildsrc.component.AndroidAdhocPlugin'
@@ -34,5 +30,4 @@ gradlePlugin {
 
 dependencies {
     api 'com.android.tools.build:gradle:3.5.3'
-    compileOnly gradleApi()
 }

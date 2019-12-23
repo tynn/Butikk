@@ -8,7 +8,8 @@ import kotlinx.coroutines.CancellationException
 /**
  * Unsubscribe from within [subscribe].
  */
-fun unsubscribe(): Nothing = throw Unsubscribe
+@Suppress("RedundantSuspendModifier")
+suspend fun unsubscribe(): Nothing = throw Unsubscribe
 
 /**
  * Subscribe to consume all [Store.value] changes with [observe].

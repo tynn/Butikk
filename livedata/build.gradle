@@ -8,6 +8,15 @@ android {
     }
 }
 
+dokka {
+    configuration {
+        externalDocumentationLink {
+            url = new URL('https://tynn-xyz.github.io/Butikk/')
+            packageListUrl = new URL(url, 'package-list')
+        }
+    }
+}
+
 dependencies {
     api project(':store')
     api Deps.kotlin.stdlib
