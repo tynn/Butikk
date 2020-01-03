@@ -10,6 +10,7 @@ import org.gradle.jvm.tasks.Jar;
 
 import javax.inject.Inject;
 
+@Deprecated // obsolete with 3.6
 abstract class VariantSourcesJar extends Jar {
 
     @Inject

@@ -13,6 +13,7 @@ import org.gradle.api.artifacts.ConfigurationContainer;
 import org.gradle.api.attributes.AttributeContainer;
 import org.gradle.api.attributes.Bundling;
 import org.gradle.api.attributes.Category;
+import org.gradle.api.attributes.LibraryElements;
 import org.gradle.api.attributes.Usage;
 import org.gradle.api.component.AdhocComponentWithVariants;
 import org.gradle.api.component.SoftwareComponentFactory;
@@ -28,10 +29,12 @@ import static org.gradle.api.attributes.Bundling.BUNDLING_ATTRIBUTE;
 import static org.gradle.api.attributes.Bundling.EXTERNAL;
 import static org.gradle.api.attributes.Category.CATEGORY_ATTRIBUTE;
 import static org.gradle.api.attributes.Category.LIBRARY;
+import static org.gradle.api.attributes.LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE;
 import static org.gradle.api.attributes.Usage.JAVA_API;
 import static org.gradle.api.attributes.Usage.JAVA_RUNTIME;
 import static org.gradle.api.attributes.Usage.USAGE_ATTRIBUTE;
 
+@Deprecated // obsolete with 3.6
 public final class AndroidAdhocPlugin implements Plugin<Project> {
 
     private static final String EXT_MESSAGE = "The Android Components plugin requires an Android Library plugin to be applied.";
@@ -74,6 +77,7 @@ public final class AndroidAdhocPlugin implements Plugin<Project> {
     private void putAttributes(AttributeContainer attributes, String usage) {
         attributes.attribute(BUNDLING_ATTRIBUTE, objectFactory.named(Bundling.class, EXTERNAL));
         attributes.attribute(CATEGORY_ATTRIBUTE, objectFactory.named(Category.class, LIBRARY));
+        attributes.attribute(LIBRARY_ELEMENTS_ATTRIBUTE, objectFactory.named(LibraryElements.class, "aar"));
         attributes.attribute(USAGE_ATTRIBUTE, objectFactory.named(Usage.class, usage));
     }
 

@@ -1,4 +1,14 @@
 publishing {
+    repositories {
+        maven {
+            name = "bintray"
+            url = 'https://api.bintray.com/maven/tynn-xyz/maven/Butikk/;publish=1'
+            credentials {
+                username System.env.BINTRAY_USER
+                password System.env.BINTRAY_KEY
+            }
+        }
+    }
     publications.all {
         pom {
             developers {
@@ -12,16 +22,6 @@ publishing {
                     name = 'The Apache License, Version 2.0'
                     url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
                 }
-            }
-        }
-    }
-    repositories {
-        maven {
-            name = "bintray"
-            url = 'https://api.bintray.com/maven/tynn-xyz/maven/Butikk/;publish=1'
-            credentials {
-                username System.env.BINTRAY_USER
-                password System.env.BINTRAY_KEY
             }
         }
     }
