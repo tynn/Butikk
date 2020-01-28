@@ -13,7 +13,7 @@ object Deps {
 
         object Lifecycle {
             private const val group = "androidx.lifecycle"
-            private const val version = "2.2.0-rc03"
+            private const val version = "2.2.0"
 
             const val livedata = "$group:lifecycle-livedata-ktx:$version"
             const val viewmodel = "$group:lifecycle-viewmodel-ktx:$version"
@@ -37,7 +37,7 @@ object Deps {
         val coroutines = Coroutines
 
         object Coroutines {
-            private const val version = "1.3.0"
+            private const val version = "1.3.3"
 
             const val core = "$group:kotlinx-coroutines-core:$version"
             const val test = "$group:kotlinx-coroutines-test:$version"

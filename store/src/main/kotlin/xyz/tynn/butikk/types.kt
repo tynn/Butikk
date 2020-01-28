@@ -52,7 +52,7 @@ interface Store<State> {
      *
      * The function might resume before the update was applied.
      *
-     * @param update The [Updater] mutate the provided [value].
+     * @param update The [Updater] mutating the provided [value].
      */
     suspend fun enqueue(update: Updater<State>)
 }

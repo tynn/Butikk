@@ -10,24 +10,14 @@ plugins {
 }
 
 repositories {
-    google()
     mavenCentral()
-    jcenter()
 }
 
 gradlePlugin {
     plugins {
-        androidPublish {
-            id = 'xyz.tynn.android.adhoc'
-            implementationClass = 'xyz.tynn.buildsrc.component.AndroidAdhocPlugin'
-        }
         kdocElements {
             id = 'xyz.tynn.kdoc.elements'
             implementationClass = 'xyz.tynn.buildsrc.component.KdocElementsPlugin'
         }
     }
-}
-
-dependencies {
-    api 'com.android.tools.build:gradle:3.5.3'
 }
