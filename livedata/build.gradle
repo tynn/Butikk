@@ -10,7 +10,7 @@ android {
     }
 }
 
-dokka {
+tasks.withType(org.jetbrains.dokka.gradle.DokkaTask) {
     configuration {
         externalDocumentationLink {
             url = new URL('https://tynn-xyz.github.io/Butikk/')
@@ -21,9 +21,8 @@ dokka {
 
 dependencies {
     api project(':store')
-    api Deps.kotlin.stdlib
-    api Deps.androidx.lifecycle.livedata
+    api 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
     testImplementation testFixtures(project(':store'))
-    testImplementation Deps.androidx.archtesting
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
 }

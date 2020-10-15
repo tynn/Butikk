@@ -3,6 +3,10 @@
 
 package xyz.tynn.butikk
 
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+
 /**
  * Observe changes to [Value] in [State] of [Store.value].
  *
@@ -11,16 +15,20 @@ package xyz.tynn.butikk
  * @param select The [Selector] of the [Value] in [State].
  * @param observe The [Observer] receiving the values.
  */
+@Deprecated(
+    "Store implements Flow and provides all its operators",
+    ReplaceWith(
+        "this.map(select).distinctUntilChanged().collect(observe)",
+        "kotlinx.coroutines.flow.collect",
+        "kotlinx.coroutines.flow.distinctUntilChanged",
+        "kotlinx.coroutines.flow.map"
+    )
+)
 suspend inline fun <State, Value> Store<State>.observe(
     crossinline select: Selector<State, Value>,
     crossinline observe: Observer<Value>
-) {
-    var latest: Any? = Any()
-    consume {
-        val value = it.select()
-        if (latest != value) {
-            latest = value
-            observe(value)
-        }
-    }
+) = map {
+    select(it)
+}.distinctUntilChanged().collect {
+    observe(it)
 }

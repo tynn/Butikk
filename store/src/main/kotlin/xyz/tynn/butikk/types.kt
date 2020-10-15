@@ -3,6 +3,9 @@
 
 package xyz.tynn.butikk
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+
 /**
  * Lambda typealias to run an action on the `Store` with the current `State` as parameter.
  */
@@ -16,11 +19,13 @@ typealias Initializer<State> = suspend () -> State
 /**
  * Lambda typealias to observe the `Value` of the [Store].
  */
+@Deprecated("Store implements Flow and provides all its operators")
 typealias Observer<Value> = suspend (Value) -> Unit
 
 /**
  * Lambda typealias to select `Value` in `State`.
  */
+@Deprecated("Store implements Flow and provides all its operators")
 typealias Selector<State, Value> = State.() -> Value
 
 /**
@@ -31,7 +36,7 @@ typealias Updater<State> = State.() -> State
 /**
  * A store providing methods to update the [value] and observe changes to it.
  */
-interface Store<State> {
+interface Store<State> : Flow<State> {
 
     /**
      * Gives access the current value of the store.
@@ -45,7 +50,14 @@ interface Store<State> {
      *
      * @param observe The [Observer] receiving the values.
      */
-    suspend fun consume(observe: Observer<State>)
+    @Deprecated(
+        "Store implements Flow and provides all its operators",
+        ReplaceWith(
+            "this.collect(observe)",
+            "kotlinx.coroutines.flow.collect"
+        )
+    )
+    suspend fun consume(observe: Observer<State>) = collect { observe(it) }
 
     /**
      * Enqueues an [update] to be applied to the [value].

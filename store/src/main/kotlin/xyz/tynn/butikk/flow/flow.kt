@@ -4,10 +4,13 @@
 package xyz.tynn.butikk.flow
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import xyz.tynn.butikk.Store
 
 /**
  * Consumes the store and creates a [Flow] of `State`.
  */
-fun <State> Store<State>.asFlow() = flow { consume { emit(it) } }
+@Deprecated(
+    "Store implements Flow and provides all its operators",
+    ReplaceWith("this")
+)
+fun <State> Store<State>.asFlow(): Flow<State> = this

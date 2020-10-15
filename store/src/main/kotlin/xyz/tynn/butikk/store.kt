@@ -7,7 +7,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.actor
-import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.plus
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -31,9 +32,11 @@ fun <State> CoroutineScope.createStore(
 @Suppress("EXPERIMENTAL_API_USAGE")
 private class StoreImpl<State>(
     scope: CoroutineScope,
-    initialize: Initializer<State>
-) : Store<State> {
-    private val store = ConflatedBroadcastChannel<State>()
+    initialize: Initializer<State>,
+    private val store: ConflatedBroadcastChannel<State> =
+        ConflatedBroadcastChannel()
+) : Store<State>, Flow<State> by store.asFlow() {
+
     private val dispatcher = scope.actor<Updater<State>> {
         try {
             store.send(initialize())
@@ -48,10 +51,6 @@ private class StoreImpl<State>(
     }
 
     override val value get() = store.value
-
-    override suspend fun consume(
-        observe: Observer<State>
-    ) = store.consumeEach { observe(it) }
 
     override suspend fun enqueue(
         update: Updater<State>

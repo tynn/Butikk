@@ -5,7 +5,7 @@ android:
   components:
     - tools
     - android-29
-    - build-tools-29.0.2
+    - build-tools-29.0.3
 
 
 branches:
@@ -19,9 +19,7 @@ git:
 
 
 before_install:
-  - mv buildSrc .buildSrc
   - gradle -b wrapper.gradle
-  - mv .buildSrc buildSrc
 
 
 before_cache:
@@ -35,7 +33,9 @@ cache:
     - $HOME/.android/build-cache
 
 
-script: ./gradlew build check && ./gradlew :dokka
+script:
+  - ./gradlew build check -x:livedata:debugKdoc -x:livedata:releaseKdoc
+  - ./gradlew :dokka :livedata:build
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -50,7 +50,7 @@ deploy:
       condition: $TRAVIS_TAG =~ ^[0-9].[0-9].[0-9]$
   - provider: script
     skip_cleanup: true
-    script: ./gradlew publish -Pversion=$TRAVIS_TAG >/dev/null
+    script: ./gradlew publish >/dev/null
     on:
       tags: true
       condition: $TRAVIS_TAG =~ ^[0-9].[0-9].[0-9]$

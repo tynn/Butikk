@@ -6,6 +6,7 @@ package xyz.tynn.butikk
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import xyz.tynn.butikk.testing.StoreUnitTest

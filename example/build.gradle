@@ -17,15 +17,16 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 }
 
 dependencies {
-    implementation project(':livedata')
+    implementation project(':store')
 
-    implementation Deps.androidx.core
-    implementation Deps.androidx.appcompat
-    implementation Deps.androidx.lifecycle.viewmodel
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 }

@@ -2,10 +2,12 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 plugins {
-    id 'com.android.library' version '3.6.0-rc01' apply false
-    id 'org.jetbrains.kotlin.jvm' version '1.3.61' apply false
-    id 'org.jetbrains.dokka' version '0.10.0'
-    id 'xyz.tynn.android.sources' version '0.1.0' apply false
+    id 'com.android.library' version '4.0.2' apply false
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10' apply false
+    id 'org.jetbrains.dokka' version '0.10.1'
+    id 'xyz.tynn.android.maven' version '0.1.0' apply false
+    id 'xyz.tynn.jvm.kdoc' version '0.1.0' apply false
+    id 'com.github.ben-manes.versions' version '0.33.0'
     id 'xyz.tynn.idea.fix' version '0.1.2'
 }
 
@@ -16,8 +18,11 @@ allprojects {
         jcenter()
     }
 
-    plugins.withId('org.jetbrains.dokka') {
-        dokka {
+    plugins.withType(org.jetbrains.dokka.gradle.DokkaPlugin) {
+        if (project != rootProject)
+            rootProject.dokka.subProjects += project.name
+
+        tasks.withType(org.jetbrains.dokka.gradle.DokkaTask) {
             configuration {
                 externalDocumentationLink {
                     url = new URL('https://developer.android.com/reference/kotlin/')
@@ -46,11 +51,14 @@ subprojects {
     }
 
     plugins.withId('org.jetbrains.kotlin.jvm') {
+        project.apply plugin: 'xyz.tynn.jvm.kdoc'
         project.apply plugin: 'maven-publish'
         project.apply plugin: 'jacoco'
 
-        java.withSourcesJar()
-        components.java.addVariantsFromConfiguration(configurations.kdocElements) {}
+        java {
+            withSourcesJar()
+            withKdocJar()
+        }
 
         publishing {
             publications {
@@ -59,28 +67,12 @@ subprojects {
                 }
             }
         }
-
-        dependencies {
-            api Deps.kotlin.stdlib
-            testImplementation Deps.kotlin.test.junit
-        }
     }
 
     plugins.withId('com.android.library') {
+        project.apply plugin: 'xyz.tynn.android.kdoc'
         project.apply plugin: 'xyz.tynn.android.sources'
-        project.apply plugin: 'maven-publish'
-
-        afterEvaluate {
-            components.release.addVariantsFromConfiguration(configurations.kdocElements) {}
-
-            publishing {
-                publications {
-                    androidJvm(MavenPublication) {
-                        from components.release
-                    }
-                }
-            }
-        }
+        project.apply plugin: 'xyz.tynn.android.maven'
     }
 
     plugins.withType(com.android.build.gradle.BasePlugin) {
@@ -88,7 +80,7 @@ subprojects {
 
         android {
             compileSdkVersion 29
-            buildToolsVersion '29.0.2'
+            buildToolsVersion '29.0.3'
 
             defaultConfig {
                 minSdkVersion 14
@@ -105,14 +97,10 @@ subprojects {
                 jvmTarget = '1.8'
             }
         }
-
-        dependencies {
-            implementation Deps.kotlin.stdlib
-        }
     }
 
     plugins.withType(JacocoPlugin) {
-        jacoco.toolVersion = '0.8.5'
+        jacoco.toolVersion = '0.8.6'
 
         tasks.withType(JacocoReport) {
             check.dependsOn it
@@ -121,24 +109,20 @@ subprojects {
     }
 
     plugins.withType(MavenPublishPlugin) {
-        project.apply plugin: 'org.jetbrains.dokka'
         project.apply from: "$rootDir/publish.gradle"
     }
+}
 
-    plugins.withId('org.jetbrains.dokka') {
-        project.apply plugin: 'xyz.tynn.kdoc.elements'
-        rootProject.dokka.subProjects += project.name
-
-        dokka {
-            outputFormat = 'html'
-            outputDirectory = "$buildDir/kdoc"
-        }
-
-        tasks.named('kdocJar') {
-            dependsOn dokka
-            from fileTree(dokka.outputDirectory)
+dependencyUpdates {
+    def isNonStable = { String version ->
+        ['alpha', 'beta', 'dev', 'rc', 'cr', 'm', 'preview', 'b', 'ea', 'eap'].any {
+            version ==~ /(?i).*[.-]${it}[.\d-+]*.*/
         }
     }
+    rejectVersionIf {
+        isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
+    }
+    gradleReleaseChannel = 'current'
 }
 
 dokka {

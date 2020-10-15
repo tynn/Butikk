@@ -9,16 +9,16 @@ import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import xyz.tynn.butikk.Store
 import xyz.tynn.butikk.Updater
 import xyz.tynn.butikk.createStore
-import xyz.tynn.butikk.flow.asFlow
-import xyz.tynn.butikk.livedata.asLiveData
-import xyz.tynn.butikk.observe
 
 class ExampleViewModel(
     application: Application
@@ -41,27 +41,28 @@ class ExampleViewModel(
                 }
             }.apply {
                 launch {
-                    asFlow().collect {
+                    collect {
                         Log.d("ExampleViewModel", it.toString())
                     }
                 }
                 launch {
-                    observe({ this }) {
-                        prefs.edit {
-                            putLong(KEY_CURRENT, it.currentCount)
-                            putLong(KEY_TOTAL, it.totalCount)
-                            putLong(KEY_RESET, it.resetCount)
+                    distinctUntilChanged()
+                        .collect {
+                            prefs.edit {
+                                putLong(KEY_CURRENT, it.currentCount)
+                                putLong(KEY_TOTAL, it.totalCount)
+                                putLong(KEY_RESET, it.resetCount)
+                            }
                         }
-                    }
                 }
             }
         }
     }
 
     val counts by lazy {
-        store.asLiveData {
-            "$currentCount/$resetCount/$totalCount"
-        }
+        store.map {
+            "${it.currentCount}/${it.resetCount}/${it.totalCount}"
+        }.asLiveData()
     }
 
     fun incrementCount() = update(store) {

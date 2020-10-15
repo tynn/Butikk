@@ -9,9 +9,9 @@ components.java {
 }
 
 dependencies {
-    api Deps.kotlin.stdlib
-    api Deps.kotlinx.coroutines.core
+    api 'org.jetbrains.kotlin:kotlin-stdlib'
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9'
 
-    testFixturesApi Deps.kotlin.test.junit
-    testFixturesApi Deps.kotlinx.coroutines.test
+    testFixturesApi 'org.jetbrains.kotlin:kotlin-test-junit'
+    testFixturesApi 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9'
 }

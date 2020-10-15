@@ -3,7 +3,27 @@
 [![Download][bintray-shield]][bintray]
 [![Coverage][codecov-shield]][codecov]
 
-Coroutine based `Store` implementation
+###### _Kotlin Coroutines_ based `Store` implementation
+
+_Butikk_ is a sequential store containing a single value. All sequential
+updates are enforced via _Kotlin Coroutines_ and all operations are suspending.
+
+Each update **must** be atomic, non-blocking and never throw.
+
+## Usage
+
+Create a store with a `CoroutineScope` and `CoroutineContext`
+
+    val store = scope.createStore(newSingleThreadContext("store")) {
+        loadState()
+    }
+
+A single thread context might have an advantage, but any other `Dispatcher`
+would suffice as well.
+
+The `Store` implements `Flow` and supports all operators available for these.
+
+    store.collect { ... }
 
 
 ## License
@@ -23,9 +43,9 @@ Coroutine based `Store` implementation
     limitations under the License.
 
 
-  [travis-shield]: https://travis-ci.com/tynn-xyz/Butikk.svg
-  [travis]: https://travis-ci.com/tynn-xyz/Butikk
-  [codecov-shield]: https://codecov.io/gh/tynn-xyz/Butikk/badge.svg
-  [codecov]: https://codecov.io/gh/tynn-xyz/Butikk
-  [bintray-shield]: https://api.bintray.com/packages/tynn-xyz/maven/Butikk/images/download.svg
   [bintray]: https://bintray.com/tynn-xyz/maven/Butikk/_latestVersion
+  [bintray-shield]: https://api.bintray.com/packages/tynn-xyz/maven/Butikk/images/download.svg
+  [codecov]: https://codecov.io/gh/tynn-xyz/Butikk
+  [codecov-shield]: https://codecov.io/gh/tynn-xyz/Butikk/badge.svg
+  [travis]: https://travis-ci.com/tynn-xyz/Butikk
+  [travis-shield]: https://travis-ci.com/tynn-xyz/Butikk.svg
